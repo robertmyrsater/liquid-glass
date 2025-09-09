@@ -1,69 +1,229 @@
-.property-controls {
+.property-controls-wrapper {
   position: fixed;
   top: 20px;
   right: 20px;
-  background: rgba(255, 255, 255, 0.9);
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  border-radius: 12px;
-  padding: 20px;
-  backdrop-filter: blur(15px);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   z-index: 1000;
-  min-width: 280px;
-  max-width: 320px;
-  transition: all 0.3s ease;
+}
+
+.property-controls {
+  border-radius: 32px;
+  min-width: 320px;
+  max-width: 360px;
   font-family: 'Inter', sans-serif;
+  overflow: hidden;
+  transition: max-height 0.4s ease-in-out;
+  max-height: 600px;
+  padding: 24px;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.18),
+    rgba(255, 255, 255, 0.12)
+  );
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(40px) saturate(150%) brightness(1.05);
+  -webkit-backdrop-filter: blur(40px) saturate(150%) brightness(1.05);
+  /* Beautiful layered shadow */
+  box-shadow: 
+    0 4px 6px rgba(0, 0, 0, 0.05),
+    0 10px 15px rgba(0, 0, 0, 0.08),
+    0 20px 40px rgba(0, 0, 0, 0.06),
+    0 2px 4px rgba(0, 0, 0, 0.04),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+.property-controls::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.4),
+    transparent
+  );
+  animation: shimmer 3s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+.mode-selector {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+  padding: 4px;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.08),
+    rgba(255, 255, 255, 0.02)
+  );
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.mode-btn {
+  flex: 1;
+  background: transparent;
+  border: 1px solid transparent;
+  color: rgba(0, 0, 0, 0.6);
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  font-family: 'Inter', sans-serif;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.mode-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 8px;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.1),
+    rgba(255, 255, 255, 0.05)
+  );
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.mode-btn:hover::before {
+  opacity: 1;
+}
+
+.mode-btn:hover {
+  color: rgba(0, 0, 0, 0.8);
+}
+
+.mode-btn.active {
+  background: linear-gradient(
+    135deg,
+    rgba(0, 0, 0, 0.15),
+    rgba(0, 0, 0, 0.08)
+  );
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  color: #000000;
+  font-weight: 600;
+  box-shadow: 
+    0 4px 12px rgba(0, 0, 0, 0.1),
+    inset 0 0 1px rgba(255, 255, 255, 0.4);
+}
+
+.mode-btn.active::before {
+  opacity: 0;
+}
+
+.divider {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  margin: 20px 0;
 }
 
 .property-controls.minimized {
-  padding: 12px 20px;
+  max-height: 80px;
 }
 
 .controls-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 15px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  padding-bottom: 10px;
+  position: relative;
+  padding-bottom: 20px;
+  margin-bottom: 0;
+  transition: padding-bottom 0.4s ease-in-out;
 }
 
 .property-controls.minimized .controls-header {
-  margin-bottom: 0;
   padding-bottom: 0;
-  border-bottom: none;
 }
 
 .controls-header h3 {
   margin: 0;
   font-size: 1.1rem;
   font-weight: 600;
-  color: #333333;
+  color: #000000;
+  letter-spacing: -0.02em;
 }
 
 .minimize-btn {
-  background: rgba(0, 0, 0, 0.05);
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  color: #333333;
-  width: 28px;
-  height: 28px;
-  border-radius: 6px;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.3),
+    rgba(255, 255, 255, 0.15)
+  );
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  color: rgba(0, 0, 0, 0.8);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 12px;
-  transition: all 0.2s ease;
+  font-size: 14px;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  /* Ensure clean circular border */
+  box-sizing: border-box;
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
 }
 
 .minimize-btn:hover {
-  background: rgba(0, 0, 0, 0.1);
+  background: linear-gradient(
+    135deg,
+    rgba(0, 0, 0, 0.12),
+    rgba(0, 0, 0, 0.06)
+  );
+  border-color: rgba(0, 0, 0, 0.25);
 }
 
 .controls-content {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
+  opacity: 1;
+  max-height: 500px;
+  overflow: hidden;
+  transition: opacity 0.3s ease-in-out, max-height 0.4s ease-in-out, padding-top 0.4s ease-in-out;
+  padding-top: 20px;
+}
+
+.controls-content.hidden {
+  opacity: 0;
+  max-height: 0;
+  padding-top: 0;
+  pointer-events: none;
+}
+
+.controls-content > * {
+  margin-bottom: 15px;
+}
+
+.controls-content > *:last-child {
+  margin-bottom: 0;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .control-group {
@@ -78,18 +238,26 @@
   align-items: center;
   font-size: 0.9rem;
   font-weight: 500;
-  color: #333333;
+  color: rgba(30, 30, 30, 0.9);
   margin-bottom: 5px;
 }
 
 .control-group .value {
-  font-family: 'Courier New', monospace;
-  background: rgba(82, 39, 255, 0.3);
-  padding: 2px 6px;
-  border-radius: 4px;
+  font-family: 'SF Mono', 'Monaco', 'Courier New', monospace;
+  background: linear-gradient(
+    135deg,
+    rgba(0, 0, 0, 0.08),
+    rgba(0, 0, 0, 0.04)
+  );
+  padding: 4px 8px;
+  border-radius: 6px;
   font-size: 0.8rem;
-  min-width: 45px;
+  min-width: 48px;
   text-align: center;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(5px);
+  font-weight: 500;
+  color: #000000;
 }
 
 .slider {
@@ -97,14 +265,24 @@
   width: 100%;
   height: 6px;
   border-radius: 3px;
-  background: rgba(0, 0, 0, 0.1);
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.2),
+    rgba(255, 255, 255, 0.1)
+  );
   outline: none;
   cursor: pointer;
-  transition: background 0.2s ease;
+  transition: all 0.2s ease;
+  position: relative;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .slider:hover {
-  background: rgba(0, 0, 0, 0.15);
+  background: linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0.12),
+    rgba(255, 255, 255, 0.1)
+  );
 }
 
 .slider::-webkit-slider-thumb {
@@ -113,77 +291,160 @@
   width: 18px;
   height: 18px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #5227ff, #7c3aed);
+  background: linear-gradient(135deg, #1a1a1a, #000000);
   cursor: pointer;
   border: 2px solid #fff;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
   transition: all 0.2s ease;
 }
 
 .slider::-webkit-slider-thumb:hover {
-  transform: scale(1.1);
-  box-shadow: 0 3px 12px rgba(82, 39, 255, 0.5);
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.6);
 }
 
 .slider::-moz-range-thumb {
   width: 18px;
   height: 18px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #5227ff, #7c3aed);
+  background: linear-gradient(135deg, #1a1a1a, #000000);
   cursor: pointer;
   border: 2px solid #fff;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
   transition: all 0.2s ease;
 }
 
 .preset-buttons {
   display: flex;
   gap: 10px;
-  margin-top: 10px;
-  padding-top: 15px;
-  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  margin-top: 25px;
 }
 
 .preset-btn {
   flex: 1;
-  background: rgba(82, 39, 255, 0.2);
-  border: 1px solid rgba(82, 39, 255, 0.4);
-  color: #333333;
-  padding: 8px 12px;
-  border-radius: 6px;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.3),
+    rgba(255, 255, 255, 0.15)
+  );
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  color: rgba(0, 0, 0, 0.8);
+  padding: 10px 12px;
+  border-radius: 50px;
   cursor: pointer;
   font-size: 0.85rem;
-  font-weight: 500;
+  font-weight: 600;
   font-family: 'Inter', sans-serif;
-  transition: all 0.2s ease;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(10px);
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
+  position: relative;
+  overflow: hidden;
+}
+
+.preset-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  transition: left 0.5s ease;
 }
 
 .preset-btn:hover {
-  background: rgba(82, 39, 255, 0.4);
-  border-color: rgba(82, 39, 255, 0.6);
-  transform: translateY(-1px);
+  background: linear-gradient(
+    135deg,
+    rgba(0, 0, 0, 0.12),
+    rgba(0, 0, 0, 0.06)
+  );
+  border-color: rgba(0, 0, 0, 0.25);
 }
 
-.preset-btn:active {
-  transform: translateY(0);
+.preset-btn:hover::before {
+  left: 100%;
 }
+
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
-  .property-controls {
+  .property-controls-wrapper {
+    position: fixed;
     top: 10px;
-    right: 10px;
     left: 10px;
-    max-width: none;
-    min-width: auto;
+    right: 10px;
+    width: auto;
   }
   
-  .preset-buttons {
-    flex-direction: column;
+  .property-controls {
+    max-width: none;
+    min-width: auto;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 20px;
+  }
+  
+  .controls-header h3 {
+    font-size: 1rem;
+  }
+  
+  .minimize-btn {
+    width: 30px;
+    height: 30px;
+    font-size: 12px;
+  }
+  
+  .controls-content {
+    padding-top: 16px;
+  }
+  
+  .control-group {
+    gap: 8px;
   }
   
   .control-group label {
     font-size: 0.85rem;
+    margin-bottom: 6px;
+  }
+  
+  .control-group .value {
+    font-size: 0.75rem;
+    padding: 3px 6px;
+    min-width: 42px;
+  }
+  
+  .slider {
+    height: 5px;
+  }
+  
+  .slider::-webkit-slider-thumb {
+    width: 16px;
+    height: 16px;
+  }
+  
+  .slider::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+  }
+  
+  .preset-buttons {
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 20px;
+  }
+  
+  .preset-btn {
+    font-size: 0.8rem;
+    padding: 12px;
+  }
+  
+  .controls-content > * {
+    margin-bottom: 12px;
   }
 }
 

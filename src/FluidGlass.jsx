@@ -29,15 +29,19 @@ export default function FluidGlass({ mode = 'lens', lensProps = {}, barProps = {
   } = rawOverrides;
 
   return (
-    <Canvas 
-      camera={{ position: [0, 0, 20], fov: 15 }} 
-      gl={{ 
-        alpha: false, 
-        antialias: true,
-        outputColorSpace: 'srgb',
-        toneMapping: 0
-      }}
-    >
+    <>
+      <div className="wabi-logo">
+        <img src="/assets/wabi-logo.png" alt="Wabi" />
+      </div>
+      <Canvas 
+        camera={{ position: [0, 0, 20], fov: 15 }} 
+        gl={{ 
+          alpha: false, 
+          antialias: true,
+          outputColorSpace: 'srgb',
+          toneMapping: 0
+        }}
+      >
       <ambientLight intensity={1} />
       <ScrollControls damping={0.2} pages={3} distance={0.4}>
         {mode === 'bar' && <NavItems items={navItems} />}
@@ -46,10 +50,11 @@ export default function FluidGlass({ mode = 'lens', lensProps = {}, barProps = {
             {/* Main headline - behind glass for refraction effect */}
             <Text 
               position={[0, 0, 5]} 
-              fontSize={0.5} 
+              fontSize={window.innerWidth <= 768 ? 0.12 : 0.22} 
               color="#000000" 
               anchorX="center" 
               anchorY="middle"
+              letterSpacing={-0.05}
             >
               Meet Wabi.
             </Text>
@@ -59,7 +64,8 @@ export default function FluidGlass({ mode = 'lens', lensProps = {}, barProps = {
           <Preload />
         </Wrapper>
       </ScrollControls>
-    </Canvas>
+      </Canvas>
+    </>
   );
 }
 
@@ -96,14 +102,16 @@ const ModeWrapper = memo(function ModeWrapper({
     const { gl, viewport, pointer, camera } = state;
     const v = viewport.getCurrentViewport(camera, [0, 0, 15]);
 
-    const destX = followPointer ? (pointer.x * v.width) / 2 : 0;
-    const destY = lockToBottom ? -v.height / 2 + 0.2 : followPointer ? (pointer.y * v.height) / 2 : 0;
+    const isMobile = window.innerWidth <= 768;
+    const destX = followPointer && !isMobile ? (pointer.x * v.width) / 2 : 0;
+    const destY = lockToBottom ? -v.height / 2 + 0.2 : followPointer && !isMobile ? (pointer.y * v.height) / 2 : 0;
     easing.damp3(ref.current.position, [destX, destY, 15], 0.15, delta);
 
     if (modeProps.scale == null) {
       const maxWorld = v.width * 0.9;
       const desired = maxWorld / geoWidthRef.current;
-      ref.current.scale.setScalar(Math.min(0.15, desired));
+      const defaultScale = isMobile ? 0.18 : 0.15;
+      ref.current.scale.setScalar(Math.min(defaultScale, desired));
     }
 
     gl.setRenderTarget(buffer);
@@ -247,31 +255,35 @@ function Images() {
     group.current.children[4].material.zoom = 1 + data.range(0.8, 0.2) / 2;
   });
 
+  const isMobile = window.innerWidth <= 768;
+  const mobileScale = isMobile ? 0.75 : 1;
+  const mobilePosition = isMobile ? 0.4 : 1;
+  
   return (
     <group ref={group}>
       <Image
-        position={[-2, -height * 0.8, 0]}
-        scale={[3, height / 1.1, 1]}
+        position={[-2 * mobilePosition, -height * 0.8, 0]}
+        scale={[3 * mobileScale, height / 1.3, 1]}
         url="https://images.unsplash.com/photo-1595001354022-29103be3b73a?q=80&w=3270&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
       />
       <Image
-        position={[2, -height * 0.9, 3]}
-        scale={3}
+        position={[2 * mobilePosition, -height * 0.9, 3]}
+        scale={3 * mobileScale}
         url="https://images.unsplash.com/photo-1478436127897-769e1b3f0f36?q=80&w=3270&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
       />
       <Image
-        position={[-2.05, -height * 1.5, 6]}
-        scale={[1, 3, 1]}
+        position={[-2.05 * mobilePosition, -height * 1.5, 6]}
+        scale={[1 * mobileScale, 3 * mobileScale, 1]}
         url="https://images.unsplash.com/photo-1513682121497-80211f36a7d3?q=80&w=3388&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
       />
       <Image
-        position={[-0.6, -height * 1.8, 9]}
-        scale={[1, 2, 1]}
+        position={[-0.6 * mobilePosition, -height * 1.8, 9]}
+        scale={[1 * mobileScale, 2 * mobileScale, 1]}
         url="https://images.unsplash.com/photo-1516205651411-aef33a44f7c2?q=80&w=2843&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
       />
       <Image
-        position={[0.75, -height * 2.2, 10.5]}
-        scale={1.5}
+        position={[0.75 * mobilePosition, -height * 2.0, 10.5]}
+        scale={1.5 * mobileScale}
         url="https://images.unsplash.com/photo-1505069190533-da1c9af13346?q=80&w=3387&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
       />
     </group>
