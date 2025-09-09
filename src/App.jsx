@@ -6,7 +6,7 @@ import './App.css'
 function App() {
   const [mode, setMode] = useState('lens')
   const [properties, setProperties] = useState(() => ({
-    scale: window.innerWidth <= 768 ? 0.18 : 0.25,
+    scale: 0.25,
     ior: 1.05,
     thickness: 5,
     chromaticAberration: 0.01,
